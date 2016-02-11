@@ -2,14 +2,19 @@
 # encoding: utf-8
 
 """
-Copyright (c) 2007, 2015 HUDORA GmbH. BSD Licensed.
+Copyright (c) 2007, 2015, 2016 HUDORA GmbH. BSD Licensed.
 """
 
 import doctest
+import re
 import string
 import sys
 import unicodedata
+
 from types import StringType
+
+import huTools.unicode_helper_latin1
+
 
 def deUTF8(data):
     """This is meant to help with utf-8 data appearing where unicode should apperar."""
@@ -57,6 +62,48 @@ def deUmlaut(data):
     except UnicodeDecodeError, msg:
         raise ValueError('%s: %r' % (msg, data))
 
+# see http://instagram-engineering.tumblr.com/post/118304328152
+# to learn more about the mess
+try:
+    HIGHPOINTS = re.compile(u'[\U00010000-\U0010ffff]')
+    EMOJI = re.compile(u'([\U00002600-\U000027BF])|([\U0001f300-\U0001f64F])|([\U0001f680-\U0001f6FF])')
+except re.error:
+    # UCS-2 build
+    HIGHPOINTS = re.compile('[\uD800-\uDBFF][\uDC00-\uDFFF]')
+    EMOJI = re.compile(u'([\u2600-\u27BF])|([\uD83C][\uDF00-\uDFFF])|([\uD83D][\uDC00-\uDE4F])|([\uD83D][\uDE80-\uDEFF])')
+DASHES = ""
+# Crap from Windows-1250: ‚„…‰Š‹ŚŤŽŹ‘’“”•–—™›ˇ¦©«®·»śťžźĄąĽľ
+# Crap fom Unicode: …
+# !¡‼❕
+# ¿⁇❓ ❔؟‽
+# ‘’“”
+# ‹ › « »
+# -‐‑–‒—― see https://www.cs.tut.fi/~jkorpela/dashes.html
+# _﹏
+# ~〜
+# ′″‴〃
+# 'ʻˮ՚Ꞌꞌ
+# /\⁄¦|
+# &＆⅋﹠
+# ·•◦‣⦿⦾⁃◘
+# ※⁕⁜*⁎∗
+# en space   em space   SYMBOL FOR SPACE ␠ BLANK  see https://www.cs.tut.fi/~jkorpela/chars/spaces.html
+
+
+def deNoise(data):
+    u"""Removes all stuff which should not appear in normal Western Text.
+
+    >>> deNoise(u'Susie`s Giga\\Super-Markt®¿')
+    u"Susie's Giga/Super-Markt?"
+    >>> deNoise(u"ümlaut eins:\x01")
+    u'\\xfcmlaut eins:'
+    >>> deNoise(u'«😎» `Umlaute kann doctest nicht so gut´ {®} ¿👩‍👩‍👧‍👦? „👨‍❤️‍💋‍👨“ ›🎅🏻🎅🏼🎅🏽🎅🏾🎅🏿‹')
+    u"() 'Umlaute kann doctest nicht so gut' () ??  "
+    """
+    data = unicodedata.normalize('NFC', data)
+    data = huTools.unicode_helper_latin1.deNoiseLatin1(data)
+    # data = unicodedata.normalize('NFKC', data) # decruft a little but keep umlauts
+    return data
 
 # from http://stackoverflow.com/questions/561486
 ALPHABET = string.digits + string.ascii_uppercase + string.ascii_lowercase
@@ -104,5 +151,7 @@ def num_encode_uppercase(n):
     return u''.join(reversed(s))
 
 if __name__ == '__main__':
+    #print deNoise(u"`Iñtërnâtiônàlizætiøn!'")
+    #print deNoise(u'«😎» `Iñtërnâtiônàlizætiøn´ {®} ¿👩‍👩‍👧‍👦? „👨‍❤️‍💋‍👨“ ›🎅🏻🎅🏼🎅🏽🎅🏾🎅🏿‹')
     failure_count, test_count = doctest.testmod()
     sys.exit(failure_count)

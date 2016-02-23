@@ -352,7 +352,7 @@ def list2xml(datalist, roottag, elementname, pretty=False):
     return to_string(root, pretty=pretty)
 
 
-def to_string(root, encoding='utf-8', pretty=False):
+def to_string(root, encoding='utf-8', pretty=False, default_namespace=None):
     """Converts an ElementTree to a string"""
 
     if pretty:
@@ -360,10 +360,7 @@ def to_string(root, encoding='utf-8', pretty=False):
 
     tree = ET.ElementTree(root)
     fileobj = StringIO()
-    fileobj.write('<?xml version="1.0" encoding="%s"?>' % encoding)
-    if pretty:
-        fileobj.write('\n')
-    tree.write(fileobj, 'utf-8')
+    tree.write(fileobj, encoding=encoding, xml_declaration=True, default_namespace=default_namespace)
     return fileobj.getvalue()
 
 

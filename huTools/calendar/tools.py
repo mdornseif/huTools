@@ -224,12 +224,12 @@ def month_add(date, months):
     return date.replace(year=year, month=month)
 
 
-def previous_year(date):
-    """Return date in previous year"""
+def year_add(date, years):
+    """Add number of years to date"""
 
-    if date.day == 29 and date.month == 2:
-        return date.replace(day=28, year=date.year - 1)
-    return date.replace(year=date.year - 1)
+    if date.day == 29 and date.month == 2 and not calendar.isleap(date.year + years):
+        return date.replace(day=28, year=date.year + years)
+    return date.replace(year=date.year + years)
 
 
 class DateTruncTestCase(unittest.TestCase):
@@ -649,25 +649,24 @@ class MonthAddTestCase(unittest.TestCase):
         self.assertEqual(month_add(date, 12), datetime.datetime(1987, 3, 9))
 
 
-class PreviousYearTestCase():
+class YearAddTestCase():
     """Unittest for previous_year"""
 
-    def test_leap_year(self):
-        """Test with dates in leap year"""
+    def test_date(self):
+        """Tests with datatype datetime.date"""
 
-        self.assertEqual(previous_year(datetime.datetime(2016, 2, 29)), datetime.datetime(2015, 2, 28))
-        self.assertEqual(previous_year(datetime.datetime(2016, 2, 28)), datetime.datetime(2015, 2, 28))
-        self.assertEqual(previous_year(datetime.date(2016, 2, 29)), datetime.datetime(2015, 2, 28))
-        self.assertEqual(previous_year(datetime.date(2016, 2, 28)), datetime.datetime(2015, 2, 28))
+        self.assertEqual(year_add(datetime.date(2016, 2, 29), 1), datetime.date(2017, 2, 28))
+        self.assertEqual(year_add(datetime.date(2015, 2, 28), 1), datetime.date(2016, 2, 28))
+        self.assertEqual(year_add(datetime.date(2017, 2, 28, -1)), datetime.date(2016, 2, 28))
+        self.assertEqual(year_add(datetime.date(2016, 2, 29), -1), datetime.date(2015, 2, 28))
 
-    def test_nonleap_year(self):
-        """Test with dates in nonleap year"""
+    def test_datetime(self):
+        """Tests with datatype datetime.datetime"""
 
-        self.assertEqual(previous_year(datetime.date(1986, 3, 9)), datetime.date(1985, 3, 9))
-        self.assertEqual(previous_year(datetime.datetime(2015, 2, 28)), datetime.datetime(2014, 2, 28))
-        self.assertEqual(previous_year(datetime.date(1986, 3, 9)), datetime.datetime(1985, 3, 9))
-        self.assertEqual(previous_year(datetime.datetime(2015, 2, 28)), datetime.datetime(2014, 2, 28))
-        self.assertEqual(previous_year(datetime.datetime(2017, 2, 28)), datetime.datetime(2016, 2, 28))
+        self.assertEqual(year_add(datetime.datetime(2016, 2, 29), 1), datetime.datetime(2017, 2, 28))
+        self.assertEqual(year_add(datetime.datetime(2015, 2, 28), 1), datetime.datetime(2016, 2, 28))
+        self.assertEqual(year_add(datetime.datetime(2017, 2, 28, -1)), datetime.datetime(2016, 2, 28))
+        self.assertEqual(year_add(datetime.datetime(2016, 2, 29), -1), datetime.datetime(2015, 2, 28))
 
 
 if __name__ == "__main__":

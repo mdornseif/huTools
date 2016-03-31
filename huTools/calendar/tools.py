@@ -209,6 +209,28 @@ def get_weekspan(date):
     return startdate, enddate
 
 
+def get_timespan(period, date):
+    """
+    Get given timespan for date
+
+    Convenience function as a wrapper for the other get_*span functions
+    """
+    if period == "year":
+        return get_yearspan(date)
+    elif period == "tertial":
+        return get_tertialspan(date)
+    elif period == "quarter":
+        get_quarterspan(date)
+    elif period == "month":
+        return get_monthspan(date)
+    elif period == "week":
+        return get_weekspan(date)
+    elif period == "day":
+        return date, date
+    else:
+        raise ValueError("Unknown truncation type %s" % trtype)
+
+
 def tertial_add(date, tertials):
     """Add number of tertials to date"""
 

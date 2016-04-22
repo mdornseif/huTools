@@ -28,8 +28,9 @@ def format_addr(address, encoding='utf-8'):
         address = address.decode(encoding)
 
     realname, address = email.utils.parseaddr(address)
-    localpart, domain = address.split('@', 1)
-    address = u'@'.join((localpart, domain.encode('idna')))
+    if '@' in address:
+        localpart, domain = address.split('@', 1)
+        address = u'@'.join((localpart, domain.encode('idna')))
     return email.utils.formataddr((realname, address))
 
 

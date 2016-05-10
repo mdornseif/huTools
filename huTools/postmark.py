@@ -3,7 +3,7 @@
 """
 postmark.py - support for the postmark mail sending API
 
-Based on pytohn-postmark (C) 2009-2010 David Martorana, Wildbit LLC, Python Software Foundation.
+Based on python-postmark (C) 2009-2010 David Martorana, Wildbit LLC, Python Software Foundation.
 
 Created by Maximillian Dornseif on 2010-09-27.
 Copyright (c) 2010 HUDORA. All rights reserved.
@@ -53,6 +53,7 @@ def send_mail(message, api_key=None):
     optional elements:
     TextBody:       Email message in plain text
     HtmlBody:       Email message in HTML
+    TrackOpens:     Do You want OpenTracking for HTML?
     Cc:             Who to copy the email to, in either
                     "name@email.com" or "First Last <name@email.com>" format
                     Can be multiple values separated by commas (limit 20)

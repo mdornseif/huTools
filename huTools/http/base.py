@@ -22,7 +22,7 @@ File Upload just works::
 `fetch_json2xx()` in addition decodes a JSON reply and returns that.
 
 Created by Maximillian Dornseif on 2010-10-24.
-Copyright (c) 2010, 2011 HUDORA. All rights reserved.
+Copyright (c) 2010, 2011, 2016 HUDORA. All rights reserved.
 """
 import cgi
 import logging
@@ -66,8 +66,13 @@ def fetch(url, content='', method='GET', credentials=None, headers=None, multipa
     * `timeout` is the maximum number of seconds the request might take. This is advisory and may not be
        enforced.
     """
-    return request(*tools.prepare_headers(url, content, method, credentials, headers, multipart, ua,
-                                          timeout, caching))
+    try:
+        return request(
+            *tools.prepare_headers(
+                url, content, method, credentials, headers, multipart, ua, timeout, caching))
+    except:
+        logging.error("%s %r", method, url)
+        raise
 
 
 def fetch2xx(url, content='', method='GET', credentials=None, headers=None, multipart=False, ua='',

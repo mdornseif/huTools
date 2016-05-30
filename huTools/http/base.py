@@ -26,6 +26,7 @@ Copyright (c) 2010, 2011, 2016 HUDORA. All rights reserved.
 """
 import cgi
 import logging
+import os
 
 from huTools import hujson2
 from huTools.http import exceptions
@@ -37,8 +38,13 @@ request = None
 engine = None
 try:
     import engine_appengine
-    request = engine_appengine.request
-    AsyncHttpResult = engine_appengine.AsyncHttpResult
+    if (os.environ.get('SERVER_SOFTWARE', '').startswith('Google App Engine/')
+        or os.environ.get('SERVER_SOFTWARE', '').startswith('Development/')):
+        # we can be sure the API services are there.
+        request = engine_appengine.request
+        AsyncHttpResult = engine_appengine.AsyncHttpResult
+    else:
+        raise ImportError
 except ImportError:
     import engine_httplib2
     request = engine_httplib2.request

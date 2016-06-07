@@ -9,6 +9,8 @@ Copyright (c) 2007, 2010 HUDORA GmbH. All rights reserved.
 
 import unittest
 import datetime
+import decimal
+import doctest
 import time
 import email.utils
 
@@ -52,8 +54,7 @@ def convert_to_date(date):
     Assumes argument to be a RfC 3339 coded date or a date(time) object.
     """
 
-    if hasattr(date, 'date') and callable(date.date):
-        # e.g. datetime objects
+    if isinstance(date, datetime.datetime):
         return date.date()
     elif isinstance(date, datetime.date):
         return date
@@ -72,6 +73,41 @@ def convert_to_date(date):
     raise ValueError("Unknown date value %r (%s)" % (date, type(date)))
 
 
+def fraction_to_microseconds(fraction):
+    """
+    Convert the fractional part to microseconds
+
+    >>> fraction_to_microseconds('1')
+    100000
+    >>> fraction_to_microseconds(12)
+    120000
+    >>> fraction_to_microseconds(123)
+    123000
+    >>> fraction_to_microseconds('1234')
+    123400
+    >>> fraction_to_microseconds('12345')
+    123450
+    >>> fraction_to_microseconds('123456')
+    123456
+    >>> fraction_to_microseconds('1234567')
+    123456
+    """
+    if isinstance(fraction, (int, long)):
+        fraction = str(fraction)
+    return int(decimal.Decimal('0.' + fraction) * 1000000)
+
+
+def _parse_timestamp(timestamp):
+    """Try to parse timestamp with various formats"""
+
+    for fmt in '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M:%S', '%Y%m%dT%H%M%S':
+        try:
+            return datetime.datetime.strptime(timestamp, fmt)
+        except ValueError:
+            continue
+    raise
+
+
 def convert_to_datetime(date):
     """Converts argument into a datetime object.
 
@@ -81,7 +117,7 @@ def convert_to_datetime(date):
     if isinstance(date, datetime.datetime):
         return date
     elif isinstance(date, datetime.date):  # order mattes! datetime is a subclass of date
-        return datetime.datetime(date.year, date.month, date.day)
+        return datetime.datetime.combine(date, datetime.time())
     elif isinstance(date, basestring):
         if len(date) < 11:
             return convert_to_datetime(convert_to_date(date))
@@ -95,18 +131,14 @@ def convert_to_datetime(date):
             ms = 0
             if '.' in date:
                 date, ms = date.split('.')
-            if len(date.split(':')) > 1 and len(date.split(':')) < 3:
-                date = date +':00'  #   append seconds
-            try:
-                ret = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S')
-            except ValueError:
-                try:
-                    ret = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
-                except ValueError:
-                    ret = datetime.datetime.strptime(date, '%Y%m%dT%H%M%S')
+
+            # Might need to append seconds
+            if 1 < len(date.split(':')) < 3:
+                date = date + ':00'
+
+            ret = _parse_timestamp(date)
             if ms:
-                return datetime.datetime(ret.year, ret.month, ret.day,
-                                         ret.hour, ret.minute, ret.second, int(ms))
+                ret = ret.replace(microsecond=fraction_to_microseconds(ms))
             return ret
     elif not date:
         return None
@@ -119,7 +151,8 @@ def rfc2616_date(date=None):
     RfC 2616 is a subset of RFC 1123 date.
     Weekday and month names for HTTP date/time formatting; always English!
     """
-    date = date or datetime.datetime.now()
+    if date is None:
+        date = datetime.datetime.now()
     return email.utils.formatdate(time.mktime(date.timetuple()), usegmt=True)
 
 
@@ -162,15 +195,22 @@ class _FormatsTests(unittest.TestCase):
         self.assertEqual(convert_to_datetime('2007-02-03T13:14:15'),
                          datetime.datetime(2007, 2, 3, 13, 14, 15))
         self.assertEqual(convert_to_datetime('2007-02-03T13:14:15.16'),
-                         datetime.datetime(2007, 2, 3, 13, 14, 15, 16))
+                         datetime.datetime(2007, 2, 3, 13, 14, 15, 160000))
         self.assertEqual(convert_to_datetime('2007-02-03 13:14:15'),
                          datetime.datetime(2007, 2, 3, 13, 14, 15))
         self.assertEqual(convert_to_datetime('2007-02-03 13:14:15.16'),
-                         datetime.datetime(2007, 2, 3, 13, 14, 15, 16))
+                         datetime.datetime(2007, 2, 3, 13, 14, 15, 160000))
         self.assertEqual(convert_to_datetime('2013-09-03 21:39:09 +0000'),
                          datetime.datetime(2013, 9, 3, 21, 39, 9))
         self.assertEqual(convert_to_datetime('2013-12-03 13:14'),
                          datetime.datetime(2013, 12, 3, 13, 14, 0, 0))
+
+        self.assertEqual(convert_to_datetime('2013-12-03 13:14:05.23'),
+                         datetime.datetime(2013, 12, 3, 13, 14, 5, 230000))
+        timestamp = convert_to_datetime('2013-12-03 13:14:05.23')
+        self.assertEqual(timestamp.isoformat(), '2013-12-03T13:14:05.230000')
+        timestamp = convert_to_datetime('2013-12-03T13:14:05.2')
+        self.assertEqual(timestamp.isoformat().rstrip('0'), '2013-12-03T13:14:05.2')
 
 
 class _ApiTests(unittest.TestCase):
@@ -182,4 +222,5 @@ class _ApiTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    doctest.testmod()
     unittest.main()

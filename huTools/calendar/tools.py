@@ -9,7 +9,6 @@ Copyright (c) 2010, 2012 HUDORA GmbH. All rights reserved.
 
 import calendar
 import datetime
-import math
 import unittest
 import warnings
 
@@ -228,7 +227,7 @@ def get_timespan(period, date):
     elif period == "day":
         return date, date
     else:
-        raise ValueError("Unknown truncation type %s" % trtype)
+        raise ValueError("Unknown truncation type %s" % period)
 
 
 def tertial_add(date, tertials):

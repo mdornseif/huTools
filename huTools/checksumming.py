@@ -14,8 +14,6 @@ This file can be used under an BSD License.
 # by checking the javascript at
 # http://www.gs1.org/productssolutions/barcodes/support/check_digit_calculator.html
 
-__revision__ = "$Revision$"
-
 import re
 import doctest
 import unittest

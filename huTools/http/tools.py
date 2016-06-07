@@ -167,6 +167,6 @@ def prepare_headers(url, content='', method='GET', credentials=None, headers=Non
     for key, val in myheaders.items():
         myheaders[key] = str(val)
     # add authentication
-    if credentials and not 'Authorization' in myheaders.keys():
+    if credentials and 'Authorization' not in myheaders.keys():
         myheaders["Authorization"] = 'Basic %s' % base64.b64encode(credentials)
     return url, method, content, myheaders, timeout, caching

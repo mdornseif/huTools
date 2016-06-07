@@ -121,11 +121,14 @@ class AsyncHttpResult(object):
     def fetch(self, url, content='', method='GET', credentials=None, headers=None, multipart=False, ua='',
               timeout=50, returnhandler=lambda x, y, z: (x, y, z)):
         """Initiate fetch call."""
-        url, method, content, headers, timeout, _dummy = huTools.http.tools.prepare_headers(url,
-            content, method, credentials, headers, multipart, ua, timeout)
-        self._cachekey = "_hutools%s.http.async_%s_%s_%s_%s" % (os.environ.get('CURRENT_VERSION_ID', ''),
-                                                                method, url, hash(content),
-                                                                hash(tuple(headers.items())))
+        url, method, content, headers, timeout, _dummy = huTools.http.tools.prepare_headers(
+            url, content, method, credentials, headers, multipart, ua, timeout)
+        self._cachekey = "_hutools%s.http.async_%s_%s_%s_%s" % (
+            os.environ.get('CURRENT_VERSION_ID', ''),
+            method,
+            url,
+            hash(content),
+            hash(tuple(headers.items())))
         self.returnhandler = returnhandler
 
         if self._caching:

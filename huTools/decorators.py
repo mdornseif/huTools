@@ -12,7 +12,6 @@ import hashlib
 import threading
 import time
 
-from _decorator import decorator
 from collections import namedtuple
 from functools import update_wrapper
 
@@ -28,6 +27,7 @@ def _getattr_(obj, name, default_thunk):
         default = default_thunk()
         setattr(obj, name, default)
         return default
+
 
 # from https://github.com/carlsverre/wraptor/blob/master/wraptor/decorators/memoize.py
 

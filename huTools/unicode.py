@@ -97,7 +97,7 @@ def deNoise(data):
     u"Susie's Giga/Super-Markt?"
     >>> deNoise(u"ümlaut eins:\x01")
     u'\\xfcmlaut eins:'
-    >>> deNoise(u'«😎» `Umlaute kann doctest nicht so gut´ {®} ¿👩‍👩‍👧‍👦? „👨‍❤️‍💋‍👨“ ›🎅🏻🎅🏼🎅🏽🎅🏾🎅🏿‹')
+    >>> deNoise(u'«😎» `Umlaute kann doctest nicht gut´ {®} ¿👩‍👩‍👧‍👦? „👨‍❤️‍💋‍👨“ ›🎅🏻🎅🏼🎅🏽🎅🏾🎅🏿‹')
     u"() 'Umlaute kann doctest nicht so gut' () ??  "
     """
     data = unicodedata.normalize('NFC', data)
@@ -150,8 +150,9 @@ def num_encode_uppercase(n):
             break
     return u''.join(reversed(s))
 
+
 if __name__ == '__main__':
-    #print deNoise(u"`Iñtërnâtiônàlizætiøn!'")
-    #print deNoise(u'«😎» `Iñtërnâtiônàlizætiøn´ {®} ¿👩‍👩‍👧‍👦? „👨‍❤️‍💋‍👨“ ›🎅🏻🎅🏼🎅🏽🎅🏾🎅🏿‹')
+    # print deNoise(u"`Iñtërnâtiônàlizætiøn!'")
+    # print deNoise(u'«😎» `Iñtërnâtiônàlizætiøn´ {®} ¿👩‍👩‍👧‍👦? „👨‍❤️‍💋‍👨“ ›🎅🏻🎅🏼🎅🏽🎅🏾🎅🏿‹')
     failure_count, test_count = doctest.testmod()
     sys.exit(failure_count)

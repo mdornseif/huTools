@@ -33,8 +33,9 @@ class testTests(unittest.TestCase):
         assert status == 200
 
     def test_fetch_post_basic(self):
-        status, header, body = fetch('http://www.postbin.org/186ndf2',
-        {'keyp1': 'value', 'just a test': 212}, 'POST')
+        status, header, body = fetch(
+            'http://www.postbin.org/186ndf2',
+            {'keyp1': 'value', 'just a test': 212}, 'POST')
         assert status == 201
 
     def test_fetch_post_file(self):

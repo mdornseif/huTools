@@ -251,7 +251,7 @@ def _convert_dict_to_xml_recurse(parent, dictitem, listnames, sort=True):
                     elem = ET.Element(tag)
                     parent.append(elem)
                     _convert_dict_to_xml_recurse(elem, child, listnames, sort=sort)
-    elif not dictitem is None:
+    elif dictitem is not None:
         parent.text = unicode(dictitem)
 
 
@@ -397,11 +397,13 @@ def list2tabular(items, fieldorder=None):
         ret.append([item.get(key, '') for key in fieldorder])
     return ret
 
+
 def x2tabular(datalist):
     if hasattr(datalist, 'items'):
         return dict2tabular(datalist)
     else:
         return list2tabular(datalist)
+
 
 def list2csv(datalist):
     """Export a list of dicts to CSV."""
@@ -466,6 +468,7 @@ def test1():
         'item4': 10,
         'item5': [dict(dict=1, in_einer=2, liste=3)] * 100})
     return d
+
 
 def test2():
     """Simple selftest."""

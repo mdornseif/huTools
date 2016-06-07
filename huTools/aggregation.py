@@ -217,5 +217,4 @@ def percentages(sumdir, basis, feldliste):
 
 if __name__ == "__main__":
     import doctest
-    import datetime
     doctest.testmod()

@@ -7,6 +7,7 @@ Copyright (c) 2009-2011, 2015 HUDORA. All rights reserved.
 """
 import csv
 import xml.etree.cElementTree as ET
+
 from StringIO import StringIO
 
 
@@ -334,34 +335,47 @@ def list2et(xmllist, root, elementname):
     return basexml.find(root)
 
 
-def dict2xml(datadict, roottag='data', listnames=None, pretty=False, sort=True):
+def dict2xml(datadict, roottag='data', listnames=None, pretty=False, sort=True, outfd=None):
     """Converts a dictionary to an UTF-8 encoded XML string.
 
     See also dict2et()
     """
     root = dict2et(datadict, roottag, listnames, sort=sort)
-    return to_string(root, pretty=pretty)
+    return to_string(root, pretty=pretty, outfd=outfd)
 
 
-def list2xml(datalist, roottag, elementname, pretty=False):
+def list2xml(datalist, roottag, elementname, pretty=False, outfd=None):
     """Converts a list to an UTF-8 encoded XML string.
 
     See also dict2et()
     """
     root = list2et(datalist, roottag, elementname)
-    return to_string(root, pretty=pretty)
+    return to_string(root, pretty=pretty, outfd=outfd)
 
 
-def to_string(root, encoding='utf-8', pretty=False, default_namespace=None):
-    """Converts an ElementTree to a string"""
+def to_string(root, encoding='utf-8', pretty=False, default_namespace=None, outfd=None):
+    """Converts an ElementTree to a string.
+
+    Sends result to `outfd` or returns a string representation if `outfd` is `None`."""
 
     if pretty:
         indent(root)
 
     tree = ET.ElementTree(root)
-    fileobj = StringIO()
-    tree.write(fileobj, encoding=encoding, xml_declaration=True, default_namespace=default_namespace)
-    return fileobj.getvalue()
+    if outfd:
+        tree.write(
+            outfd,
+            encoding=encoding,
+            xml_declaration=True,
+            default_namespace=default_namespace)
+    else:
+        fileobj = StringIO()
+        tree.write(
+            fileobj,
+            encoding=encoding,
+            xml_declaration=True,
+            default_namespace=default_namespace)
+        return fileobj.getvalue()
 
 
 def dict2tabular(items, fieldorder=None):

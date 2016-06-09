@@ -67,6 +67,11 @@ def _unknown_handler(value):
     raise TypeError("%s(%s)" % (type(value), value))
 
 
+def dump(val, fd, indent=' '):
+    json.dump(val, fd, sort_keys=True, indent=bool(indent), ensure_ascii=True,
+                      default=_unknown_handler)
+
+
 def dumps(val, indent=' '):
     return json.dumps(val, sort_keys=True, indent=bool(indent), ensure_ascii=True,
                       default=_unknown_handler)

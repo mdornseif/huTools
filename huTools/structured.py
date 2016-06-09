@@ -388,11 +388,9 @@ def dict2tabular(items, fieldorder=None):
     for fielname in fieldorder:
         allfieldnames.remove(fielname)
     fieldorder = fieldorder + list(sorted(allfieldnames))
-    ret = []
-    ret.append(fieldorder)
+    yield fieldorder
     for item in items.values():
-        ret.append([item.get(key, '') for key in fieldorder])
-    return ret
+        yield [item.get(key, '') for key in fieldorder]
 
 
 def list2tabular(items, fieldorder=None):
@@ -405,11 +403,10 @@ def list2tabular(items, fieldorder=None):
     for fielname in fieldorder:
         allfieldnames.remove(fielname)
     fieldorder = fieldorder + list(sorted(allfieldnames))
-    ret = []
-    ret.append(fieldorder)
-    for item in items:
-        ret.append([item.get(key, '') for key in fieldorder])
-    return ret
+    yield fieldorder
+    for item in items.values():
+        yield [item.get(key, '') for key in fieldorder]
+
 
 def x2tabular(datalist):
     if hasattr(datalist, 'items'):

@@ -404,7 +404,7 @@ def list2tabular(items, fieldorder=None):
         allfieldnames.remove(fielname)
     fieldorder = fieldorder + list(sorted(allfieldnames))
     yield fieldorder
-    for item in items.values():
+    for item in items:
         yield [item.get(key, '') for key in fieldorder]
 
 

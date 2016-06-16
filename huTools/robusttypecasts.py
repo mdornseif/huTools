@@ -2,11 +2,13 @@
 
 """Module for robust typecasts."""
 
-from types import ListType, TupleType
 import doctest
 import re
 import sys
 import warnings
+
+from types import ListType
+from types import TupleType
 
 
 def only_digits(data):

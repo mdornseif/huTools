@@ -76,18 +76,21 @@ __version_info__ = (1, 0, 1, 20)  # first three nums match Markdown.pl
 __version__ = '1.0.1.19'
 __author__ = "Trent Mick"
 
-import os
-import sys
-from pprint import pprint
-import re
 import logging
+import os
+import re
+import sys
+
+from pprint import pprint
 try:
     from hashlib import md5
 except ImportError:
     from md5 import md5
-import optparse
-from random import random, randint
 import codecs
+import optparse
+
+from random import randint
+from random import random
 from urllib import quote
 
 

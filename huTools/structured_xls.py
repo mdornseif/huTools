@@ -7,8 +7,10 @@ Created by Maximillian Dornseif on 2014-02-24.
 Copyright (c) 2014, 2015 HUDORA. All rights reserved.
 """
 import datetime
+
 from cStringIO import StringIO
-from xlwt import Workbook, XFStyle
+from xlwt import Workbook
+from xlwt import XFStyle
 
 
 datestyle = XFStyle()

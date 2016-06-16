@@ -12,9 +12,10 @@ Copyright (c) 2010 HUDORA. All rights reserved.
 """
 
 
-from _jsonlib import UnknownSerializerError
 import _jsonlib
 import datetime
+
+from _jsonlib import UnknownSerializerError
 
 
 def _unknown_handler(value):

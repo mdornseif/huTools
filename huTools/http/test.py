@@ -8,6 +8,7 @@ Copyright (c) 2010 HUDORA. All rights reserved.
 """
 
 import unittest
+
 from huTools.http import fetch
 
 

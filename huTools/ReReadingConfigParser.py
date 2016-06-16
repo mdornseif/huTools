@@ -35,9 +35,10 @@ MIT Licence."""
 
 __revision__ = "$Revision$"
 
-from ConfigParser import ConfigParser
 import os
 import stat
+
+from ConfigParser import ConfigParser
 
 
 class ReReadingConfigParser(ConfigParser):

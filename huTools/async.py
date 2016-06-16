@@ -11,8 +11,8 @@ parts based on http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/84317
 import copy
 import logging
 import sys
-import time
 import threading
+import time
 
 
 class Future:

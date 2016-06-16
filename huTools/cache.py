@@ -58,12 +58,15 @@
     :license: BSD, see LICENSE for more details.
 """
 
+import hashlib
 import os
 import re
-import hashlib
+
+from cPickle import HIGHEST_PROTOCOL
+from cPickle import dumps
+from cPickle import loads
 from itertools import izip
 from time import time
-from cPickle import loads, dumps, HIGHEST_PROTOCOL
 
 
 class BaseCache(object):

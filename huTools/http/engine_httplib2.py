@@ -7,8 +7,9 @@ Created by Maximillian Dornseif on 2010-10-24.
 Copyright (c) 2010, 2011 HUDORA. All rights reserved.
 """
 
-import socket
 import huTools.http.tools
+import socket
+
 from huTools.http import exceptions
 _http = None
 

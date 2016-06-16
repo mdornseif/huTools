@@ -16,10 +16,10 @@ This file can be used under an BSD License.
 
 __revision__ = "$Revision$"
 
-import re
 import doctest
-import unittest
+import re
 import sys
+import unittest
 
 
 def ean_digit(arg):

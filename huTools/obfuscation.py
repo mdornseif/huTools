@@ -9,8 +9,8 @@ Created by Maximillian Dornseif on 2009-08-31.
 Copyright (c) 2009 HUDORA. All rights reserved.
 """
 
-import sys
 import random
+import sys
 
 
 class RC4:

@@ -7,10 +7,10 @@ Created by Maximillian Dornseif on 2007-06-24.
 Copyright (c) 2007, 2010 HUDORA GmbH. All rights reserved.
 """
 
-import unittest
 import datetime
-import time
 import email.utils
+import time
+import unittest
 
 
 def german_weekday_name(date):

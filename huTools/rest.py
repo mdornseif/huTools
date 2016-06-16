@@ -7,12 +7,13 @@ Created by Christian Klein on 2010-07-21.
 Copyright (c) 2010 HUDORA. All rights reserved.
 """
 
-from huTools.http import fetch
 import os
+import simplejson as json
 import urllib
 import urlparse
-import simplejson as json
 import warnings
+
+from huTools.http import fetch
 
 
 def build_url(base, *args):

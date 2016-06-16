@@ -19,8 +19,8 @@ Created by Maximillian Dornseif on 2006-11-08. BSD Licensed.
 import base64
 import hashlib
 import os
-import time
 import socket
+import time
 import unittest
 import uuid
 

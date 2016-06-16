@@ -9,8 +9,9 @@ BSD Licensed.
 
 import datetime
 import doctest
-import unittest
 import sys
+import unittest
+
 from huTools.calendar.formats import convert_to_date
 from huTools.decorators import lru_cache
 

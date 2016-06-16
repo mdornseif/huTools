@@ -19,6 +19,7 @@ import xml.etree.ElementTree as ET
 
 class FMTPError(Exception):
     """FMTP-Exception"""
+
     def __init__(self, code, msg):
         super(FMTPError, self).__init__('%d %s' % (code, msg))
         self.code = code

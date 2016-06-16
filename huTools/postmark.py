@@ -110,7 +110,7 @@ def send_mail(message, api_key=None):
             return True
         else:
             raise RuntimeError('Postmark Return code %d: %s' % (result.code, result.msg))
-    except urllib2.HTTPError, err:
+    except urllib2.HTTPError as err:
         if err.code == 401:
             raise RuntimeError('Sending Unauthorized - incorrect API key.', err)
         elif err.code == 422:
@@ -123,7 +123,7 @@ def send_mail(message, api_key=None):
             raise PMUnprocessableEntity(desc)
         elif err.code == 500:
             raise RuntimeError('Internal server error at Postmark. Admins have been alerted.', err)
-    except urllib2.URLError, err:
+    except urllib2.URLError as err:
         if hasattr(err, 'reason'):
             raise RuntimeError(("URLError: Failed to reach the server: %s (See 'inner_exception' for"
                                 " details)") % err.reason, err)

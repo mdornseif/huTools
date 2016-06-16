@@ -358,6 +358,7 @@ class DateTruncTestCase(unittest.TestCase):
 
 class WeekTestCase(unittest.TestCase):
     """Unittests for get_week"""
+
     def test_week(self):
         self.assertEqual(get_week(datetime.datetime(1979, 1, 1)), (1, 1979))
         self.assertEqual(get_week(datetime.datetime(1980, 1, 1)), (53, 1979))

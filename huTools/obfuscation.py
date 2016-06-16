@@ -21,6 +21,7 @@ class RC4:
     >>> RC4('sekrit').decrypt(RC4('sekrit').encrypt('foo'))
     'foo'
     """
+
     def __init__(self, key):
         """initialize the state table."""
         random.seed()

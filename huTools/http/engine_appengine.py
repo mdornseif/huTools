@@ -11,17 +11,14 @@ Copyright (c) 2010, 2011 HUDORA. All rights reserved.
 """
 
 
-import StringIO
-import gzip
 import huTools.http.tools
+import gzip
 import os
 import zlib
+import StringIO
 
-from google.appengine.api import memcache
-from google.appengine.api import urlfetch
-from google.appengine.api import urlfetch_errors
-from google.appengine.api.urlfetch import create_rpc
-from google.appengine.api.urlfetch import make_fetch_call
+from google.appengine.api.urlfetch import create_rpc, make_fetch_call
+from google.appengine.api import memcache, urlfetch, urlfetch_errors
 from huTools.http import exceptions
 
 
@@ -59,7 +56,7 @@ def request(url, method, content, headers, timeout=50, caching=None):
     try:
         result = urlfetch.fetch(url=url, deadline=timeout, payload=content,
                                 method=method, headers=headers)
-    except urlfetch_errors.DownloadError, exception:
+    except urlfetch_errors.DownloadError as exception:
         # App Engine uses the same exception class for several types of errors.
         # It seems that the only mean to distinguish timeouts from other errors
         # is by looking at the error message.
@@ -124,8 +121,8 @@ class AsyncHttpResult(object):
     def fetch(self, url, content='', method='GET', credentials=None, headers=None, multipart=False, ua='',
               timeout=50, returnhandler=lambda x, y, z: (x, y, z)):
         """Initiate fetch call."""
-        url, method, content, headers, timeout, _dummy = huTools.http.tools.prepare_headers(url,
-                                                                                            content, method, credentials, headers, multipart, ua, timeout)
+        url, method, content, headers, timeout, _dummy = huTools.http.tools.prepare_headers(
+            url, content, method, credentials, headers, multipart, ua, timeout)
         self._cachekey = "_hutools%s.http.async_%s_%s_%s_%s" % (os.environ.get('CURRENT_VERSION_ID', ''),
                                                                 method, url, hash(content),
                                                                 hash(tuple(headers.items())))

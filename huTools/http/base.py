@@ -22,10 +22,11 @@ File Upload just works::
 `fetch_json2xx()` in addition decodes a JSON reply and returns that.
 
 Created by Maximillian Dornseif on 2010-10-24.
-Copyright (c) 2010, 2011 HUDORA. All rights reserved.
+Copyright (c) 2010, 2011, 2016 HUDORA. All rights reserved.
 """
 import cgi
 import logging
+import os
 
 from huTools import hujson2
 from huTools.http import exceptions
@@ -37,8 +38,13 @@ request = None
 engine = None
 try:
     import engine_appengine
-    request = engine_appengine.request
-    AsyncHttpResult = engine_appengine.AsyncHttpResult
+    if (os.environ.get('SERVER_SOFTWARE', '').startswith('Google App Engine/')
+            or os.environ.get('SERVER_SOFTWARE', '').startswith('Development/')):
+        # we can be sure the API services are there.
+        request = engine_appengine.request
+        AsyncHttpResult = engine_appengine.AsyncHttpResult
+    else:
+        raise ImportError
 except ImportError:
     import engine_httplib2
     request = engine_httplib2.request
@@ -66,8 +72,13 @@ def fetch(url, content='', method='GET', credentials=None, headers=None, multipa
     * `timeout` is the maximum number of seconds the request might take. This is advisory and may not be
        enforced.
     """
-    return request(*tools.prepare_headers(url, content, method, credentials, headers, multipart, ua,
-                                          timeout, caching))
+    try:
+        return request(
+            *tools.prepare_headers(
+                url, content, method, credentials, headers, multipart, ua, timeout, caching))
+    except:
+        logging.error("%s %r", method, url)
+        raise
 
 
 def fetch2xx(url, content='', method='GET', credentials=None, headers=None, multipart=False, ua='',
@@ -131,8 +142,8 @@ def fetch_json2xx_async(url, content='', method='GET', credentials=None, headers
             # So wo only check for a missmatched header but ignore empty ones.
             # So far this has been only observed with async requests.
             if rheaders.get('Content-Type', None) is not None:
-                raise TypeError(u"%s: Ungueltiger Content-Type %r: %r" %
-                                (url, rheaders.get('Content-Type', ''), rcontent))
+                raise TypeError(u"%s: Ungueltiger Content-Type %r: %r" % (url,
+                                                                          rheaders.get('Content-Type', ''), rcontent))
         return returnhandler(hujson2.loads(rcontent))
 
     return fetch_async(url, content, method, credentials, headers, multipart, ua, timeout,
@@ -178,4 +189,5 @@ def json_iterator(url, method='GET', content=None, credentials=None, datanodenam
             if content is None:
                 content = {}
             for key, values in tmp.items():
-                content[key] = values[0]
+                if key != 'cursor_start':
+                    content[key] = values[0]

@@ -57,9 +57,9 @@ def deUmlaut(data):
 
     try:
         return data.encode('ascii', 'replace')
-    except UnicodeEncodeError, msg:
+    except UnicodeEncodeError as msg:
         raise ValueError('%s: %r' % (msg, data))
-    except UnicodeDecodeError, msg:
+    except UnicodeDecodeError as msg:
         raise ValueError('%s: %r' % (msg, data))
 
 # see http://instagram-engineering.tumblr.com/post/118304328152

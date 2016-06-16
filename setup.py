@@ -16,7 +16,7 @@ setup(
     author_email='md@hudora.de',
     url='http://hudora.github.com/huTools/',
     license='BSD',
-    packages = [
+    packages=[
         'huTools',
         'huTools.http',
         'huTools.http._httplib2',

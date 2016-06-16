@@ -20,6 +20,7 @@ from StringIO import StringIO
 # and accessing them as `obj['key']` is tiresome after some time. `obj.key` is much nicer.
 class Struct(object):
     """Emulate a cross over between a dict() and an object()."""
+
     def __init__(self, entries, default=None, nodefault=False):
         # ensure all keys are strings and nothing else
         entries = dict([(str(x), y) for x, y in entries.items()])

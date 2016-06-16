@@ -11,14 +11,17 @@ Copyright (c) 2010, 2011 HUDORA. All rights reserved.
 """
 
 
-import huTools.http.tools
+import StringIO
 import gzip
+import huTools.http.tools
 import os
 import zlib
-import StringIO
 
-from google.appengine.api.urlfetch import create_rpc, make_fetch_call
-from google.appengine.api import memcache, urlfetch, urlfetch_errors
+from google.appengine.api import memcache
+from google.appengine.api import urlfetch
+from google.appengine.api import urlfetch_errors
+from google.appengine.api.urlfetch import create_rpc
+from google.appengine.api.urlfetch import make_fetch_call
 from huTools.http import exceptions
 
 

@@ -6,8 +6,8 @@ as multipart/form-data suitable for a HTTP POST or PUT request.
 multipart/form-data is the standard way to upload files over HTTP"""
 
 __all__ = ['gen_boundary', 'encode_and_quote', 'MultipartParam',
-        'encode_string', 'encode_file_header', 'get_body_size', 'get_headers',
-        'multipart_encode']
+           'encode_string', 'encode_file_header', 'get_body_size', 'get_headers',
+           'multipart_encode']
 
 
 import mimetypes
@@ -72,7 +72,7 @@ class MultipartParam(object):
     beginning of the file.
     """
     def __init__(self, name, value=None, filename=None, filetype=None,
-                        filesize=None, fileobj=None):
+                 filesize=None, fileobj=None):
         self.name = encode_and_quote(name)
         self.value = _strify(value)
         if filename is None:
@@ -84,7 +84,7 @@ class MultipartParam(object):
             else:
                 self.filename = str(filename)
             self.filename = self.filename.encode("string_escape").\
-                    replace('"', '\\"')
+                replace('"', '\\"')
         self.filetype = _strify(filetype)
 
         self.filesize = filesize
@@ -124,9 +124,9 @@ class MultipartParam(object):
         """
 
         return cls(paramname, filename=os.path.basename(filename),
-                filetype=mimetypes.guess_type(filename)[0],
-                filesize=os.path.getsize(filename),
-                fileobj=open(filename, "rb"))
+                   filetype=mimetypes.guess_type(filename)[0],
+                   filesize=os.path.getsize(filename),
+                   fileobj=open(filename, "rb"))
 
     @classmethod
     def from_params(cls, params):
@@ -153,7 +153,7 @@ class MultipartParam(object):
                     filetype = None
 
                 retval.append(cls(name=name, filename=filename,
-                    filetype=filetype, fileobj=value))
+                                  filetype=filetype, fileobj=value))
             else:
                 retval.append(cls(name, value))
         return retval
@@ -166,7 +166,7 @@ class MultipartParam(object):
 
         if self.filename:
             disposition = 'form-data; name="%s"; filename="%s"' % (self.name,
-                    self.filename)
+                                                                   self.filename)
         else:
             disposition = 'form-data; name="%s"' % self.name
 
@@ -212,7 +212,7 @@ class MultipartParam(object):
             last_block = ""
             encoded_boundary = "--%s" % encode_and_quote(boundary)
             boundary_exp = re.compile("^%s$" % re.escape(encoded_boundary),
-                    re.M)
+                                      re.M)
             while True:
                 block = self.fileobj.read(blocksize)
                 if not block:
@@ -244,7 +244,7 @@ def encode_string(boundary, name, value):
 
 
 def encode_file_header(boundary, paramname, filesize, filename=None,
-        filetype=None):
+                       filetype=None):
     """Returns the leading data for a multipart/form-data field that contains
     file data.
 
@@ -264,7 +264,7 @@ def encode_file_header(boundary, paramname, filesize, filename=None,
     """
 
     return MultipartParam(paramname, filesize=filesize, filename=filename,
-            filetype=filetype).encode_hdr(boundary)
+                          filetype=filetype).encode_hdr(boundary)
 
 
 def get_body_size(params, boundary):

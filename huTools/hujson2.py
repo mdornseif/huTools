@@ -32,7 +32,7 @@ def _unknown_handler(value):
         properties = value.properties()
         if isinstance(properties, dict):
             keys = (key for (key, datatype) in properties.iteritems()
-                if datatype.__class__.__name__ not in ['BlobProperty'])
+                    if datatype.__class__.__name__ not in ['BlobProperty'])
         elif isinstance(properties, (set, list)):
             keys = properties
         else:
@@ -56,11 +56,11 @@ def _unknown_handler(value):
         return str(value)
     # for Google AppEngine `ndb`
     elif (hasattr(value, '_properties') and hasattr(value._properties, 'items')
-        and callable(value._properties.items)):
-            return dict([(k, v._get_value(value)) for k, v in value._properties.items()])
+          and callable(value._properties.items)):
+        return dict([(k, v._get_value(value)) for k, v in value._properties.items()])
     elif hasattr(value, 'urlsafe') and callable(value.urlsafe):
         return str(value.urlsafe())
-    #elif hasattr(value, '_get_value') and callable(value._get_value):
+    # elif hasattr(value, '_get_value') and callable(value._get_value):
     #    retdict = dict()
     #    value._get_value(retdict)
     #    return retdict
@@ -69,7 +69,7 @@ def _unknown_handler(value):
 
 def dump(val, fd, indent=' '):
     json.dump(val, fd, sort_keys=True, indent=bool(indent), ensure_ascii=True,
-                      default=_unknown_handler)
+              default=_unknown_handler)
 
 
 def dumps(val, indent=' '):

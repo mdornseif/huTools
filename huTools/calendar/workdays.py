@@ -21,7 +21,7 @@ STATIC_GERMAN_HOLIDAYS = ((1, 1),    # Neujahr
                           (11, 1),   # Allerheiligen
                           (12, 25),  # Erster Weihnachtstag
                           (12, 26),  # Zweiter Weihnachtstag
-)
+                          )
 
 
 def add_to_day(day, offset):
@@ -95,6 +95,7 @@ def workdays(start, end):
     else:
         return _workdays(start, end)
 
+
 def _workdays(start, end):
     "Helper for `workdays()`."
 
@@ -141,7 +142,7 @@ def workdays_german(start, end):
 def workdayhours_german(start, end):
     """Calculates the number of hours expect weekends and german holidays between two given datetimes."""
     noncountingdays = (end.date() - start.date()) - \
-                       datetime.timedelta(workdays_german(start.date(), end.date()))
+        datetime.timedelta(workdays_german(start.date(), end.date()))
     delta = (end - start - noncountingdays)
     return (delta.days * 24) + (delta.seconds / 60.0 / 60.0)
 

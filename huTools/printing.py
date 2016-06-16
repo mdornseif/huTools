@@ -35,7 +35,7 @@ def print_data(data, jobname=None, printer=None, copies=1, printserver='printser
     if printer:
         args.append('-P%s' % str(printer))
 
-    #if printserver:
+    # if printserver:
     #    args.append('-H %s' % printserver)
     if jobname:
         args.append('-J %s  ' % jobname.replace("'\";./ ", "_"))

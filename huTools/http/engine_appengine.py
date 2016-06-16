@@ -122,7 +122,7 @@ class AsyncHttpResult(object):
               timeout=50, returnhandler=lambda x, y, z: (x, y, z)):
         """Initiate fetch call."""
         url, method, content, headers, timeout, _dummy = huTools.http.tools.prepare_headers(url,
-            content, method, credentials, headers, multipart, ua, timeout)
+                                                                                            content, method, credentials, headers, multipart, ua, timeout)
         self._cachekey = "_hutools%s.http.async_%s_%s_%s_%s" % (os.environ.get('CURRENT_VERSION_ID', ''),
                                                                 method, url, hash(content),
                                                                 hash(tuple(headers.items())))

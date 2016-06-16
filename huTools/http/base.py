@@ -39,7 +39,7 @@ engine = None
 try:
     import engine_appengine
     if (os.environ.get('SERVER_SOFTWARE', '').startswith('Google App Engine/')
-        or os.environ.get('SERVER_SOFTWARE', '').startswith('Development/')):
+            or os.environ.get('SERVER_SOFTWARE', '').startswith('Development/')):
         # we can be sure the API services are there.
         request = engine_appengine.request
         AsyncHttpResult = engine_appengine.AsyncHttpResult
@@ -92,12 +92,13 @@ def fetch2xx(url, content='', method='GET', credentials=None, headers=None, mult
 
 
 def fetch_json2xx(url, content='', method='GET', credentials=None, headers=None, multipart=False, ua='',
-             timeout=50, caching=None):
+                  timeout=50, caching=None):
     """Like `fetch2xx()` but JSON-decodes the returned content and returns only that."""
     status, rheaders, rcontent = fetch2xx(url, content, method, credentials, headers, multipart, ua, timeout,
                                           caching)
     if not rheaders.get('content-type', '').startswith('application/json'):
-        raise TypeError(u"Ungueltiger Content-Type %r: %r %r" % (rheaders.get('content-type', ''), rcontent, url))
+        raise TypeError(u"Ungueltiger Content-Type %r: %r %r" %
+                        (rheaders.get('content-type', ''), rcontent, url))
     return hujson2.loads(rcontent)
 
 
@@ -126,7 +127,7 @@ def fetch_async(url, content='', method='GET', credentials=None, headers=None, m
 
 
 def fetch_json2xx_async(url, content='', method='GET', credentials=None, headers=None, multipart=False,
-             ua='', timeout=50, returnhandler=lambda x: x, caching=None):
+                        ua='', timeout=50, returnhandler=lambda x: x, caching=None):
     """Like `fetch_async()` but returnhandler is called with decoded jsondata."""
     def decodingreturnhandler(status, rheaders, rcontent):
         """Closure to do the json decoding and then call the provided returnhandler"""
@@ -142,7 +143,7 @@ def fetch_json2xx_async(url, content='', method='GET', credentials=None, headers
             # So far this has been only observed with async requests.
             if rheaders.get('Content-Type', None) is not None:
                 raise TypeError(u"%s: Ungueltiger Content-Type %r: %r" % (url,
-                                    rheaders.get('Content-Type', ''), rcontent))
+                                                                          rheaders.get('Content-Type', ''), rcontent))
         return returnhandler(hujson2.loads(rcontent))
 
     return fetch_async(url, content, method, credentials, headers, multipart, ua, timeout,

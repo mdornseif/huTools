@@ -414,6 +414,7 @@ def x2tabular(datalist):
     else:
         return list2tabular(datalist)
 
+
 def list2csv(datalist):
     """Export a list of dicts to CSV."""
     data = x2tabular(datalist)
@@ -477,6 +478,7 @@ def test1():
         'item4': 10,
         'item5': [dict(dict=1, in_einer=2, liste=3)] * 100})
     return d
+
 
 def test2():
     """Simple selftest."""

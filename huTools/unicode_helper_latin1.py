@@ -38,6 +38,7 @@ for result, inputs in REPLACRS.iteritems():
         REVERSEREPLACRS[c] = result
 REPLACE_RE = re.compile('[%s]' % ''.join([re.escape(x) for x in REVERSEREPLACRS.keys()]))
 
+
 def deNoiseLatin1(data):
     """Replace typical latin1 problem chars."""
     data = data.encode('latin-1', 'ignore')

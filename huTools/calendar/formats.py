@@ -96,7 +96,7 @@ def convert_to_datetime(date):
             if '.' in date:
                 date, ms = date.split('.')
             if len(date.split(':')) > 1 and len(date.split(':')) < 3:
-                date = date +':00'  #   append seconds
+                date = date + ':00'  # append seconds
             try:
                 ret = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S')
             except ValueError:

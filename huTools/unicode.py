@@ -70,7 +70,8 @@ try:
 except re.error:
     # UCS-2 build
     HIGHPOINTS = re.compile('[\uD800-\uDBFF][\uDC00-\uDFFF]')
-    EMOJI = re.compile(u'([\u2600-\u27BF])|([\uD83C][\uDF00-\uDFFF])|([\uD83D][\uDC00-\uDE4F])|([\uD83D][\uDE80-\uDEFF])')
+    EMOJI = re.compile(
+        u'([\u2600-\u27BF])|([\uD83C][\uDF00-\uDFFF])|([\uD83D][\uDC00-\uDE4F])|([\uD83D][\uDE80-\uDEFF])')
 DASHES = ""
 # Crap from Windows-1250: ‚„…‰Š‹ŚŤŽŹ‘’“”•–—™›ˇ¦©«®·»śťžźĄąĽľ
 # Crap fom Unicode: …
@@ -151,7 +152,7 @@ def num_encode_uppercase(n):
     return u''.join(reversed(s))
 
 if __name__ == '__main__':
-    #print deNoise(u"`Iñtërnâtiônàlizætiøn!'")
-    #print deNoise(u'«😎» `Iñtërnâtiônàlizætiøn´ {®} ¿👩‍👩‍👧‍👦? „👨‍❤️‍💋‍👨“ ›🎅🏻🎅🏼🎅🏽🎅🏾🎅🏿‹')
+    # print deNoise(u"`Iñtërnâtiônàlizætiøn!'")
+    # print deNoise(u'«😎» `Iñtërnâtiônàlizætiøn´ {®} ¿👩‍👩‍👧‍👦? „👨‍❤️‍💋‍👨“ ›🎅🏻🎅🏼🎅🏽🎅🏾🎅🏿‹')
     failure_count, test_count = doctest.testmod()
     sys.exit(failure_count)

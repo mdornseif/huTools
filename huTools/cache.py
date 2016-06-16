@@ -447,7 +447,7 @@ class GAEMemcachedCache(MemcachedCache):
 
 # removed class FileSystemCache(BaseCache):
 
-### Additional Code from huTools
+# Additional Code from huTools
 
 # Return a cache object whatever is available: AppEngine, memcache or a simple in-memory cache. We use
 # the environment variable `CURRENT_VERSION_ID` to allow using different cache entries by different

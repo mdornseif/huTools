@@ -104,7 +104,7 @@ def send_mail(message, api_key=None):
 
     logging.debug('Accessing %semail' % __POSTMARK_URL__)
     try:
-        result = urllib2.urlopen(req)
+        result = urllib2.urlopen(req, timeout=15)
         result.close()
         if result.code == 200:
             return True

@@ -343,3 +343,49 @@ def none_on_exception(func):
         except Exception:
             return None
     return _decorator
+
+
+
+# Funktionalität, die vor der Benutzung veralteter Schnittstellen warnt.
+
+class LegacyProperty(object):
+    """Leitet ein Property um und warnt vor der Benutzung.
+
+    @property
+    def sh(self):
+        return self.order.versandkosten
+    versandkosten = LegacyProperty(sh, anstatt='versandkosten')
+
+    """
+
+    def __init__(self, prop=None, anstatt='?'):
+        # logging scheint hier nicht zu gehen
+        self.prop = prop
+        self.alter_name = anstatt
+
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        if self.prop is None:
+            raise AttributeError("unreadable attribute")
+        if hasattr(self.prop, 'fget'):
+            text = "{} anstatt {} verwenden".format(self.prop.fget.__name__, self.alter_name)
+            warnings.warn(text, DeprecationWarning, stacklevel=2)  # das scheint nicht zu klappen
+            return self.prop.fget(obj)
+        elif hasattr(self.prop, 'prop'):
+            # keine Ahnung, wie hier saubere Rekursion abzubilden ist
+            logging.error(
+                "you seem to have a LegacyProperty-Loop at %s %s",
+                getattr(self.prop, 'alter_name', self.prop),
+                getattr(self.prop.prop, 'alter_name', self.prop.prop))
+            if hasattr(self.prop.prop, 'fget'):
+                return self.prop.prop.fget(obj)
+        else:
+            logging.warn("self.prop = %r", dir(self.prop))
+            logging.warn("%r", dir(obj))
+            raise AttributeError("unreadable attribute")
+        return None
+
+    def getter(self, fget):
+        return type(self)(fget)
+

@@ -11,6 +11,7 @@ import functools
 import hashlib
 import threading
 import time
+import warnings
 
 from _decorator import decorator
 from collections import namedtuple

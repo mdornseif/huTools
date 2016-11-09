@@ -147,6 +147,21 @@ def get_week(date):
     return week, first_monday.year
 
 
+def max_time(date):
+    """
+    Datum mit maximaler Uhrzeit versehen.
+
+    Hilfsfunktion für die span-Funktionen.
+    >>> max_time(datetime.datetime(1986, 3, 9))
+    datetime.date(1986, 3, 9)
+    >>> max_time(datetime.datetime(1986, 3, 9))
+    datetime.datetime(1986, 3, 9, 23, 59, 59, 999999)
+    """
+    if isinstance(date, datetime.datetime):
+        return date.combine(date, datetime.time.max)
+    return date
+
+
 def get_yearspan(date):
     """Gibt den ersten und letzten Tag des Jahres zurück in dem `date` liegt
 

@@ -6,6 +6,7 @@ Created by Maximillian Dornseif on 2009-12-27.
 Copyright (c) 2009-2011, 2015 HUDORA. All rights reserved.
 """
 import csv
+import unittest
 import xml.etree.cElementTree as ET
 
 from StringIO import StringIO
@@ -26,7 +27,7 @@ class Struct(object):
         entries = dict([(str(x), y) for x, y in entries.items()])
         self.__dict__.update(entries)
         self.__default = default
-        self.__nodefault = default is not None or nodefault
+        self.__nodefault = False if default is not None else nodefault
 
     def __getattr__(self, name):
         """Emulate Object access.
@@ -471,36 +472,54 @@ def indent(elem, level=0):
             elem.tail = i
 
 
-def test1():
-    d = make_struct({
-        'item1': 'string',
-        'item2': ['dies', 'ist', 'eine', 'liste'] * 100,
-        'item3': dict(dies=1, ist=2, ein=3, dict=4),
-        'item4': 10,
-        'item5': [dict(dict=1, in_einer=2, liste=3)] * 100})
-    return d
+
+class TestCase(unittest.TestCase):
+    """Simple Unittests"""
+
+    def test_dict2xml(self):
+        """Most basic test for dict2xml"""
+
+        data = {"guid": "3104247-7",
+                "menge": 7,
+                "artnr": "14695",
+                "batchnr": "3104247"}
+
+        self.assertEqual(
+            dict2xml(data, roottag='warenzugang'),
+            '<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<warenzugang><artnr>14695</artnr>'
+            '<batchnr>3104247</batchnr><guid>3104247-7</guid><menge>7</menge></warenzugang>')
+
+    def test_struct(self):
+        struct = make_struct({
+            'item1': 'string',
+            'item2': ['dies', 'ist', 'eine', 'liste'] * 100,
+            'item3': dict(dies=1, ist=2, ein=3, dict=4),
+            'item4': 10,
+            'item5': [dict(dict=1, in_einer=2, liste=3)] * 100})
+
+        self.assertEqual(struct.item1, 'string')
+
+    def test_struct_default(self):
+        struct = make_struct({}, default=u'*')
+        self.assertEqual(struct.non_existing, u'*')
+
+    def test_struct_nodefault(self):
+        struct = make_struct({}, nodefault=True)
+        with self.assertRaises(AttributeError):
+            self.assertFalse(struct.non_existing)
+
+    def test_struct_default_nodefault(self):
+        struct = make_struct({}, default=u'?', nodefault=True)
+        self.assertEqual(struct.non_existing, u'?')
 
 
-def test2():
-    """Simple selftest."""
-
-    data = {"guid": "3104247-7",
-            "menge": 7,
-            "artnr": "14695",
-            "batchnr": "3104247"}
-    xmlstr = dict2xml(data, roottag='warenzugang')
-    assert xmlstr == ('<?xml version="1.0" encoding="utf-8"?><warenzugang><artnr>14695</artnr>'
-                      '<batchnr>3104247</batchnr><guid>3104247-7</guid><menge>7</menge></warenzugang>')
+def test():
+    """Run tests"""
+    unittest.main()
+    failure_count, test_count = doctest.testmod()
+    sys.exit(failure_count)
 
 
 if __name__ == '__main__':
     import doctest
-    import sys
-    import timeit
-    import cProfile
-    failure_count, test_count = doctest.testmod()
-    test1()
-    test2()
-    print timeit.timeit('test1()', setup="from __main__ import test1", number=1000)
-    cProfile.run('test1()')
-    sys.exit(failure_count)
+    test()

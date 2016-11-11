@@ -8,11 +8,15 @@ Copyright (c) 2011 HUDORA GmbH. All rights reserved.
 """
 
 
-class WrongStatusCode(RuntimeError):
+class BaseHTTPException(RuntimeError):
+    """Base for all our exceptions"""
+    pass
+
+class WrongStatusCode(BaseHTTPException):
     """Thrown if the Server returns a unexpected status code."""
     pass
 
 
-class Timeout(RuntimeError):
+class Timeout(BaseHTTPException):
     """Thrown on request timeout"""
     pass

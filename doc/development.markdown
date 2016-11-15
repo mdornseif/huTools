@@ -5,10 +5,9 @@ Here we store Information in regard to Software Development at Hudora.
 ## Tools
 
 
-* We use [github.com/hudora][github] for version control
+* We use [github.com/hudora][github] for version control, tickets and reviews
   ([Introduction][githubintro]) - you should create an account there
 * We use [gerrit][gerrithudora] as a review system - you should create an account there
-* [Sublime Text 2][sublime] is the offical editor at Hudora Cybernetics.
 
 [github]: http://github.com/hudora
 [githubintro]: https://cybernetics.hudora.biz/intern/wordpress/2009/12/github-it-is/
@@ -39,11 +38,10 @@ Here we store Information in regard to Software Development at Hudora.
    `defaults write com.macromates.textmate OakWrapColumns '( 40, 72, 78, 109 )'` to make wraping
    more comfortable.
  * Follow [PEP 8][pep8].
-   Use [pep8.py][pep8py] `--max-line-length=110 --repeat` to verify compliance.
  * Follow [PEP 257][pep257] for docstrings
  * No tabs. Not anywhere (except in Makefiles). Always indent with 4 spaces.
- * use [pyflakes][pyflakes]. 
- * Use [pylint][pylint]. Aim for a score of at least 8. The higher the better. If you score is below 8 be prepared to present a good reason for it.
+ * use [flake8][flake8] to check compliance. 
+ * Use [pylint][pylint]. See [gaetk][gaetkinc] for sesible options.
  * Classes/Variables which reference Objects specific to our ERP/our Industry/german trade should be in german as technical terms. Generic Objects should be named in english: "Lieferscheinnummer", "Kundenauftragsnumer", "Rechnung" but "TransportEndpoint" and "DataStore". This line is very blurry. See the "Protokolle" at SoftwareEntwicklung for further guidelines on naming.
  * Variable Names should not be abbreviated. The only exceptions are "nummer" -> "nr" and "kommissionier" -> "kommi".
  * Code should be targeted at Python 2.7 on FreeBSD / Ubuntu Linux or Google AppEngine
@@ -53,16 +51,15 @@ Here we store Information in regard to Software Development at Hudora.
  * Let [the Zen of Python][zen] guide you and avoid [Anti-Idioms][donts].
  * [Fail Fast][failfast] and [crash early][crashearly]!
  * Make your stuff [Idempotent][idempotent].
- * Alwais provide audit logs.
+ * Always provide audit logs.
  * avoid float values where possible. They [probably don't work as you think they work][floats]. Store Cent instead of Euro, Millimeters instead of Centimeters and so on.
  * Provide a `Makefile` with `dependencies`, `test` and `check` (pylint/pyflakes/pep8) targets.
- * Write doctests. Write unittests. Aim for a [test coverage][coverage] of at least 80% for all non-networked code. The higher the better.
 
 [pep8]: http://www.python.org/dev/peps/pep-0008/
-[pep8py]: https://github.com/jcrocholl/pep8
 [pep257]: http://www.python.org/dev/peps/pep-0257/
-[pyflakes]: http://pypi.python.org/pypi/pyflakes
+[flake8]: https://pypi.python.org/pypi/flake8
 [pylint]: http://www.python.org/pypi/pylint 
+[gaetkinc]: https://github.com/mdornseif/appengine-toolkit/blob/master/include.mk
 [zen]: http://www.python.org/dev/peps/pep-0020/
 [donts]: http://docs.python.org/howto/doanddont.html
 [failfast]: http://en.wikipedia.org/wiki/Fail-fast 
@@ -71,18 +68,23 @@ Here we store Information in regard to Software Development at Hudora.
 [floats]: http://docs.sun.com/source/806-3568/ncg_goldberg.html
 [idempotent]: http://en.wikipedia.org/wiki/Idempotent
 
+
 ## Conventions
 
 Use our naming conventions for [Adresses][adressprot], [Orders][orderprotocol] and [Warehouse related stuff][icwmsprot] (more to come).
 
-[adressprot]: http://github.com/hudora/huTools/blob/master/doc/standards/address_protocol.markdown
-[orderprotocol]: http://github.com/hudora/huTools/blob/master/doc/standards/verysimpleorderprotocol.markdown
-[icwmsprot]: http://github.com/hudora/huTools/blob/master/doc/standards/messaging_ic-wms.markdown
+[adressprot]: http://github.com/mdornseif/huTools/blob/master/doc/standards/address_protocol.markdown
+[orderprotocol]: http://github.com/mdornseif/huTools/blob/master/doc/standards/verysimpleorderprotocol.markdown
+[icwmsprot]: http://github.com/mdornseif/huTools/blob/master/doc/standards/messaging_ic-wms.markdown
 
 
 ## Identifiers
 
-Use global unique identifiers where ever possible. `huTools.luids.guid128()` creates somewhat compact representations of random IDs. It's even better if you can find an standartisized Scheme of unique IDs. Good Candidates are found in the [EPC Tag Data Standard (TDS)][tds], in [Tag URIs][taguri] as defined in [RfC 4151][rfc4151]. Avoid global counters.
+Use global unique identifiers where ever possible. `huTools.luids.guid128()` creates somewhat compact representations of random IDs. It's even better if you can find an standartisized Scheme of unique IDs. Good Candidates are found in the [EPC Tag Data Standard (TDS)][tds], in [Tag URIs][taguri] as defined in [RfC 4151][rfc4151]. Avoid global counters. Special considerations on Appengine apply. Try 
+
+```kopf.guid = "c%s" % huTools.unicode.num_encode_uppercase(kopf.key.id())```
+
+where `c` should be replaced by an object specific letter.
 
 [tds]: http://www.epcglobalinc.org/standards/tds/
 [taguri]: http://en.wikipedia.org/wiki/Tag_URI
@@ -106,18 +108,12 @@ Use global unique identifiers where ever possible. `huTools.luids.guid128()` cre
 
 * Use `filter()` instead of GQL - skips the parsing step.
 * Use [gaetk][gaetk], instead of Django
+* Use `ndb`, instead of `db`
 * Aim for response time under 1 s better under 500 ms and page sizes under 10 kb.
 * Always comment the indexes you add to `index.yaml`
 
 
 [gaetk]: https://github.com/mdornseif/appengine-toolkit
-
-
-## Tools for internal Developers
-
-* We use [hudora.lighthouseapp.com][lighthouseapp] for feature requests ([Introduction][lighthousintro]) - you should create an account there
-[lighthouseapp]: http://hudora.lighthouseapp.com
-[lighthousintro]: https://cybernetics.hudora.biz/intern/wordpress/2009/12/lighthouse-it-is/
 
 
 ## Required Reading
@@ -136,5 +132,4 @@ Use global unique identifiers where ever possible. `huTools.luids.guid128()` cre
 [idiomatic]: http://python.net/~goodger/projects/pycon/2007/idiomatic/handout.html
 [pyguide]: http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
 [refactoring]: http://martinfowler.com/books.html#refactoring
-[failure]: http://cybernetics.hudora.biz/nonpublic/Paul%20Fenwick,%20Perl%20Training%20Australia_%20_An%20Illustrated%20History%20of%20Failure_.mov
-
+[failure]: https://www.youtube.com/watch?v=KkoyVPPXt5w

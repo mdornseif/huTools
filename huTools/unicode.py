@@ -100,7 +100,11 @@ def deNoise(data):
     u'\\xfcmlaut eins:'
     >>> deNoise(u'«😎» `Umlaute kann doctest nicht so gut´ {®} ¿👩‍👩‍👧‍👦? „👨‍❤️‍💋‍👨“ ›🎅🏻🎅🏼🎅🏽🎅🏾🎅🏿‹')
     u"() 'Umlaute kann doctest nicht so gut' () ??  "
+    >>> deNoise(100)
+    100
     """
+    if not isinstance(data, basestring):
+        return data
     data = unicodedata.normalize('NFC', data)
     data = huTools.unicode_helper_latin1.deNoiseLatin1(data)
     # data = unicodedata.normalize('NFKC', data) # decruft a little but keep umlauts

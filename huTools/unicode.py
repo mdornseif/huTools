@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 """
-Copyright (c) 2007, 2015, 2016 HUDORA GmbH. BSD Licensed.
+Copyright (c) 2007, 2015, 2016, 2017 HUDORA GmbH. BSD Licensed.
 """
 
 import doctest
@@ -106,9 +106,26 @@ def deNoise(data):
     if not isinstance(data, basestring):
         return data
     data = unicodedata.normalize('NFC', data)
+    data = re.sub(r'(\r\n|\n\r|\r|\n)', u' ', data)
     data = huTools.unicode_helper_latin1.deNoiseLatin1(data)
     # data = unicodedata.normalize('NFKC', data) # decruft a little but keep umlauts
     return data
+
+
+def deNoiseNL(data):
+    r"""Like deNoise but fixes newlines and keeps \n.
+
+    >>> deNoise(u'new\nline')
+    u'new line'
+    >>> deNoiseNL(u'new\nline')
+    u'new\nline'
+    >>> deNoise([u'100', 100, u'¿'])
+    [u'100', 100, u'\xc2\xbf']
+    """
+    if not isinstance(data, basestring):
+        return data
+    return u'\n'.join(deNoise(x) for x in re.sub(r'(\r\n|\n\r|\r)', u'\n', data).split(u'\n'))
+
 
 # from http://stackoverflow.com/questions/561486
 ALPHABET = string.digits + string.ascii_uppercase + string.ascii_lowercase

@@ -28,11 +28,7 @@ def german_month_name(date):
 
 def tertial(date):
     """Wandelt ein Date oder Datetime-Objekt in einen Tertial-String"""
-    ret = date.strftime('%Y-%m')
-    ret = ret[:-2] + {'01': 'A', '02': 'A', '03': 'A', '04': 'A',
-                      '05': 'B', '06': 'B', '07': 'B', '08': 'B',
-                      '09': 'C', '10': 'C', '11': 'C', '12': 'C'}[ret[-2:]]
-    return ret
+    return u'%d-%s' % (date.year, 'ABC'[(date.month - 1) / 4])
 
 
 def rfc3339_date(date=None):

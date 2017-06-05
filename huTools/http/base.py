@@ -87,7 +87,7 @@ def fetch2xx(url, content='', method='GET', credentials=None, headers=None, mult
     status, rheaders, rcontent = fetch(url, content, method, credentials, headers, multipart, ua, timeout,
                                        caching)
     if (status < 200) or (status >= 300):
-        raise exceptions.WrongStatusCode(u"%s: Fehler: %r %r" % (status, rcontent, url))
+        raise exceptions.WrongStatusCode(u"%s: Fehler: %r %r" % (status, url, rcontent[:100]))
     return status, rheaders, rcontent
 
 
@@ -132,7 +132,7 @@ def fetch_json2xx_async(url, content='', method='GET', credentials=None, headers
     def decodingreturnhandler(status, rheaders, rcontent):
         """Closure to do the json decoding and then call the provided returnhandler"""
         if (status < 200) or (status >= 300):
-            raise exceptions.WrongStatusCode(u"%s: Fehler: %r" % (status, rcontent))
+            raise exceptions.WrongStatusCode(u"%s: Fehler: %r %r" % (status, url, rcontent[:100]))
         # Warnig! httplib2 ist case sensitive for header field names.
         if not rheaders.get('Content-Type', '').startswith('application/json'):
             logging.debug("no valid content type: %r", rheaders)

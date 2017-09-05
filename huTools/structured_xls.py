@@ -13,10 +13,6 @@ from xlwt import Workbook
 from xlwt import XFStyle
 
 
-datestyle = XFStyle()
-datestyle.num_format_str = 'YYYY-MM-DD'
-
-
 class XLSwriter(object):
     """csv-Modul kompatibles Interface zum Erzeugen von Excel Dateien.
 
@@ -29,12 +25,29 @@ class XLSwriter(object):
         self.rownum = 0
         self.output = output
 
+        datestyle = XFStyle()
+        datestyle.num_format_str = 'YYYY-MM-DD'
+        intstyle = XFStyle()
+        intstyle.num_format_str = '0'
+        floatstyle = XFStyle()
+        floatstyle.num_format_str = '0.00'
+
+        self.styles = {
+            'date': datestyle,
+            'int': intstyle,
+            'float': floatstyle,
+        }
+
     def writerow(self, row):
         """Eine Zeile schreiben. Row ist eine Liste von Werten."""
         col = 0
         for coldata in row:
             if isinstance(coldata, (datetime.datetime, datetime.date, datetime.time)):
-                self.sheet.write(self.rownum, col, coldata, datestyle)
+                self.sheet.write(self.rownum, col, coldata, self.styles['date'])
+            elif isinstance(coldata, (int, long)):
+                self.sheet.write(self.rownum, col, coldata, self.styles['int'])
+            elif isinstance(coldata, float):
+                self.sheet.write(self.rownum, col, coldata, self.styles['float'])
             else:
                 if len(unicode(coldata)) > 8192:
                     # übergroße Felder RADIKAL verkürzen

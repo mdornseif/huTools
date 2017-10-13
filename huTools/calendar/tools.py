@@ -153,7 +153,7 @@ def max_time(date):
 
     Hilfsfunktion für die span-Funktionen.
     >>> max_time(datetime.datetime(1986, 3, 9))
-    datetime.date(1986, 3, 9)
+    datetime.datetime(1986, 3, 9, 23, 59, 59, 999999)
     >>> max_time(datetime.datetime(1986, 3, 9))
     datetime.datetime(1986, 3, 9, 23, 59, 59, 999999)
     """
@@ -251,6 +251,14 @@ def tertial_add(date, tertials):
 
     date = date_trunc('tertial', date)
     month = date.month + tertials * 4
+    return date.replace(year=date.year + month // 12, month=month % 12)
+
+
+def quarter_add(date, quarters):
+    """Add number of quarters to date"""
+
+    date = date_trunc('quarter', date)
+    month = date.month + quarters * 3
     return date.replace(year=date.year + month // 12, month=month % 12)
 
 
@@ -657,6 +665,32 @@ class TertialAddTestCase(unittest.TestCase):
         self.assertEqual(tertial_add(date, 3), datetime.datetime(1983, 9, 1))
         self.assertEqual(tertial_add(date, 4), datetime.datetime(1984, 1, 1))
         self.assertEqual(tertial_add(date, 91), date_trunc('tertial', datetime.datetime(2013, 4, 20)))
+
+
+class QuarterAddTestCase(unittest.TestCase):
+    """Unittests for quarter_add"""
+
+    def test_date(self):
+        """Tests with datatype datetime.date"""
+
+        date = datetime.date(1986, 3, 9)
+        self.assertEqual(quarter_add(date, -1), datetime.date(1985, 10, 1))
+        self.assertEqual(quarter_add(date, 0), datetime.date(1986, 1, 1))
+        self.assertEqual(quarter_add(date, 1), datetime.date(1986, 4, 1))
+        self.assertEqual(quarter_add(date, 2), datetime.date(1986, 7, 1))
+        self.assertEqual(quarter_add(date, 3), datetime.date(1986, 10, 1))
+        self.assertEqual(quarter_add(date, 4), datetime.date(1987, 1, 1))
+
+    def test_datetime(self):
+        """Tests with datatype datetime.datetime"""
+
+        date = datetime.datetime(1986, 3, 9)
+        self.assertEqual(quarter_add(date, -1), datetime.datetime(1985, 10, 1))
+        self.assertEqual(quarter_add(date, 0), datetime.datetime(1986, 1, 1))
+        self.assertEqual(quarter_add(date, 1), datetime.datetime(1986, 4, 1))
+        self.assertEqual(quarter_add(date, 2), datetime.datetime(1986, 7, 1))
+        self.assertEqual(quarter_add(date, 3), datetime.datetime(1986, 10, 1))
+        self.assertEqual(quarter_add(date, 4), datetime.datetime(1987, 1, 1))
 
 
 class MonthAddTestCase(unittest.TestCase):

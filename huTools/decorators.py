@@ -188,6 +188,7 @@ def lru_cache(maxsize=64, typed=False, ttl=None):
     See:  http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used
 
     """
+    # this is a blackport from Python 3.2 with added TTL
 
     # Users should only access the lru_cache through its public API:
     #       cache_info, cache_clear, and f.__wrapped__

@@ -26,7 +26,10 @@ def _unknown_handler(value):
         return value.dict_mit_positionen()
     elif hasattr(value, 'as_dict') and callable(value.as_dict):
         # helpful for structured.Struct() Objects
-        return value.as_dict()
+        try:
+            return value.as_dict()
+        except:
+            return str(value)
     # for Google AppEngine
     elif hasattr(value, 'properties') and callable(value.properties):
         properties = value.properties()

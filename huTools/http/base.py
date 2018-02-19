@@ -28,7 +28,7 @@ import cgi
 import logging
 import os
 
-from huTools import hujson2
+from gaetk2.tools import hujson2
 from huTools.http import exceptions
 from huTools.http import tools
 
@@ -77,7 +77,7 @@ def fetch(url, content='', method='GET', credentials=None, headers=None, multipa
             *tools.prepare_headers(
                 url, content, method, credentials, headers, multipart, ua, timeout, caching))
     except:
-        logging.error("%s %r", method, url)
+        logging.info("error accessing %s %r", method, url)
         raise
 
 

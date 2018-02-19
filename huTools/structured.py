@@ -421,7 +421,7 @@ def list2csv(datalist):
     """Export a list of dicts to CSV."""
     data = x2tabular(datalist)
     fileobj = StringIO()
-    csvwriter = csv.writer(fileobj, dialect='excel', delimiter='\t')
+    csvwriter = csv.writer(fileobj, dialect='excel', delimiter=str('\t'))
     fixer = lambda row: [unicode(x).encode('utf-8') for x in row]
     for row in data:
         csvwriter.writerow(fixer(row))

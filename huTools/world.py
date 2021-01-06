@@ -60,11 +60,11 @@ COUNTRY_CHOICES = [('DE', u'Deutschland'),
 COUNTRIES = dict(COUNTRY_CHOICES).keys()
 
 
-# Stand: Juli 2013 - diese MÜSSEN auch in COUNTRY_CHOICES vorkommen.
+# Stand: Januar 2021 - diese MÜSSEN auch in COUNTRY_CHOICES vorkommen.
 EUROPEAN_UNION = ['BE', 'IT', 'RO', 'BG', 'LV', 'SE',
                   'DK', 'LT', 'SK', 'DE', 'LU', 'SI',
                   'EE', 'MT', 'ES', 'FI', 'NL', 'CZ',
-                  'FR', 'AT', 'HU', 'GR', 'PL', 'GB',
+                  'FR', 'AT', 'HU', 'GR', 'PL',
                   'IE', 'PT', 'CY', 'HR']
 
 
